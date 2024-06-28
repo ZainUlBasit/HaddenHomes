@@ -1,0 +1,11 @@
+.image-transition {
+  transition: height 0.3s ease;
+}
+
+.image-in-view {
+  height: 100%;
+}
+
+.image-out-view {
+  height: 0%;
+}
