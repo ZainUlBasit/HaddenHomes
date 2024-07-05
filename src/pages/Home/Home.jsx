@@ -7,6 +7,8 @@ import TextVelocityCard from "../../components/Cards/TextVelocityCard";
 import Section from "../../components/Cards/Section";
 import MeetTeamCard from "../../components/Cards/MeetTeamCard";
 import CurvedCarousel from "../../components/Carousels/CurvedCarousel";
+import OurWorkCard from "../../components/Cards/OurWorkCard";
+import Footer from "../../components/Footer/Footer";
 // import Section from "../../components/Cards/Section";
 
 const Home = () => {
@@ -22,7 +24,9 @@ const Home = () => {
       <Section onScrollComplete={handleScrollComplete} />
       <ScrollerComponent />
       <MeetTeamCard />
+      <OurWorkCard />
       <CurvedCarousel />
+      <Footer />
     </div>
   );
 };
