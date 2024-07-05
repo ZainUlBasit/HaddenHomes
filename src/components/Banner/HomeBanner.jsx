@@ -1,30 +1,78 @@
-import React from "react";
+import React, { useState, useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import image from "/home.jpg"; // Ensure this path is correct
 
-const HomeBanner = () => {
+gsap.registerPlugin(ScrollTrigger);
+
+export default function HomeBanner({ onScrollComplete }) {
+  const textContainerRef = useRef(null);
+
+  useEffect(() => {
+    const minHeight = window.innerHeight * 0.7; // 70% of viewport height
+    const minWidth = window.innerWidth * 0.4; // 40% of viewport width
+    const maxHeight = window.innerHeight * 2.0; // 200% of viewport height
+    const maxWidth = window.innerWidth * 2.0; // 200% of viewport width
+
+    ScrollTrigger.create({
+      trigger: textContainerRef.current,
+      start: "top top",
+      end: "bottom bottom",
+      onUpdate: (self) => {
+        const progress = self.progress;
+
+        const newHeight = minHeight + (maxHeight - minHeight) * progress;
+        const newWidth = minWidth + (maxWidth - minWidth) * progress;
+
+        gsap.to(textContainerRef.current, {
+          width: newWidth,
+          height: newHeight,
+          duration: 0.1,
+          ease: "none",
+        });
+
+        if (self.progress >= 1) {
+          onScrollComplete(true);
+        } else {
+          onScrollComplete(false);
+        }
+      },
+    });
+
+    return () => {
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
+    };
+  }, [onScrollComplete]);
+
+  const textStyle = {
+    backgroundImage: `url(${image})`,
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    transition: "width 0.1s ease, height 0.1s ease",
+  };
+
   return (
-    <div className="bg-custom-gradient flex h-[90vh] justify-center items-end">
-      <div
-        className="relative inline-block p-[10px] rounded-tr-[180px] rounded-tl-[180px] z-10"
-        style={{
-          background:
-            "linear-gradient(128.08deg, #F9FAF2 78.93%, #FEFFF2 14.87%, #F1F4DC 47.86%, #FFFEFB 78.93%)",
-        }}
-      >
+    <div className="relative flex flex-col items-center justify-end h-screen overflow-hidden">
+      <div className="absolute inset-0">
         <img
-          src="./home.jpg"
-          className="h-[550px] w-[350px] object-cover relative z-10 rounded-tr-[180px] rounded-tl-[180px]"
+          src={image}
+          alt="Design Build"
+          className="object-cover w-full h-full"
         />
-        <div className="absolute top-0 left-0 h-full w-full flex flex-col justify-start items-center mt-[100px]">
-          <span className="text-black font-[Montserrat] text-3xl font-[600] z-20 text-shadow">
-            Design
-          </span>
-          <span className="text-black font-[Montserrat] text-3xl font-[600] z-20 text-shadow">
-            Build
-          </span>
-        </div>
+      </div>
+      <div className="absolute inset-0 bg-[#FFFEF9]"></div>
+      <div
+        ref={textContainerRef}
+        className="relative z-10 text-center pt-28 border-[#f0ede1] border-l-[2rem] border-r-[2rem] border-t-[2rem] rounded-t-full bg-opacity-100"
+        style={textStyle}
+      >
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-medium text-white">
+          BUILD
+        </h1>
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-medium text-white">
+          DESIGN
+        </h1>
       </div>
     </div>
   );
-};
-
-export default HomeBanner;
+}
