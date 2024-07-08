@@ -5,11 +5,16 @@ import "./index.css";
 import { store } from "./store/store";
 import { Provider } from "react-redux";
 import Home from "./pages/Home/Home";
+import About from "./pages/Home/About";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <Home />,
+  },
+  {
+    path: "/about",
+    element: <About />,
   },
   // {
   //   path: "/*",
